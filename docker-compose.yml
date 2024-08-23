@@ -1,0 +1,16 @@
+version: '1.0'
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - webclient_data:/var/lib/postgresql/data
+
+volumes:
+  webclient_data:

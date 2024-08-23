@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "32013460-8e3c-41b9-8d25-6bfa067ec8d8",
+		"name": "PhotoDownloader",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23976118"
+	},
+	"item": [
+		{
+			"name": "Загрузить (скачать) картинки",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/upload?url=https://api.unsplash.com/search/photos?query=cat%26per_page=20%26client_id=uL8M3yxXcVbLe6amtkt-aW5jcKdDmv2N-oW2N1HqhVA%26client_secret=0KHuTO8h4Ri22w6f_0qu9ZL88v-WvMzLp2uPCy3O4c4%26min_width=2048%26min_height=2048",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"upload"
+					],
+					"query": [
+						{
+							"key": "per_page",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "client_id",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "url",
+							"value": "https://api.unsplash.com/search/photos?query=cat%26per_page=20%26client_id=uL8M3yxXcVbLe6amtkt-aW5jcKdDmv2N-oW2N1HqhVA%26client_secret=0KHuTO8h4Ri22w6f_0qu9ZL88v-WvMzLp2uPCy3O4c4%26min_width=2048%26min_height=2048"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Загрузить (скачать) картинки 2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/correctUpload?url=https://api.unsplash.com/search/photos?query=cat%26per_page=20%26client_id=uL8M3yxXcVbLe6amtkt-aW5jcKdDmv2N-oW2N1HqhVA%26client_secret=0KHuTO8h4Ri22w6f_0qu9ZL88v-WvMzLp2uPCy3O4c4%26min_width=2048%26min_height=2048",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"correctUpload"
+					],
+					"query": [
+						{
+							"key": "url",
+							"value": "https://api.unsplash.com/search/photos?query=cat%26per_page=20%26client_id=uL8M3yxXcVbLe6amtkt-aW5jcKdDmv2N-oW2N1HqhVA%26client_secret=0KHuTO8h4Ri22w6f_0qu9ZL88v-WvMzLp2uPCy3O4c4%26min_width=2048%26min_height=2048"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Получить картинки",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response.json();\r",
+							"const base64Strings = response; \r",
+							"console.log(base64Strings.length)\r",
+							"const imagesHtml = base64Strings.map((base64String, index) => {\r",
+							"    let test=base64String.imageData\r",
+							"  return `<img src=\"data:image/png;base64,${test}\" title=\"Image ${index + 1}\">`;\r",
+							"}).join('');\r",
+							"\r",
+							"pm.visualizer.set(imagesHtml);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/octet-stream",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": ""
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/api/imagesInRange?startId=100&endId=10000",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"imagesInRange"
+					],
+					"query": [
+						{
+							"key": "startId",
+							"value": "100"
+						},
+						{
+							"key": "endId",
+							"value": "10000"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
