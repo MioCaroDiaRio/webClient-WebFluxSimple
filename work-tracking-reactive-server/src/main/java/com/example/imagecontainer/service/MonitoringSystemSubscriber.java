@@ -1,26 +1,37 @@
 package com.example.imagecontainer.service;
 
 import com.example.imagecontainer.entity.Notification;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
 @Service
 public class MonitoringSystemSubscriber {
-    @Autowired
-    private KafkaTemplate<String, Notification> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final Sinks.Many<Notification> notificationSink;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private Sinks.Many<Notification> notificationSink;
+    public MonitoringSystemSubscriber(KafkaTemplate<String, String> kafkaTemplate, Sinks.Many<Notification> notificationSink, ObjectMapper objectMapper) {
+        this.kafkaTemplate = kafkaTemplate;
+        this.notificationSink = notificationSink;
+        this.objectMapper = objectMapper;
+    }
+
 
     @PostConstruct
     public void init() {
         notificationSink.asFlux().subscribe(notification -> {
             //А тут мы вообще просто отправим это куда-то
-            kafkaTemplate.send("monitoring-topic", notification);
+            String jsonMessage = null;
+            try {
+                jsonMessage = objectMapper.writeValueAsString(notification);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            kafkaTemplate.send("monitoring-topic", jsonMessage);
         });
     }
 
