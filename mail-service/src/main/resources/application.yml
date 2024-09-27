@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: notification-sender-service
+  mail:
+    host: #SMTP сервер
+    port: 25 #Порт может быть и другой
+    username: #наша почта, с которой должны идти уведомления
+    password: #Пароль от нее же
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  kafka:
+    consumer:
+      group-id: some_id
